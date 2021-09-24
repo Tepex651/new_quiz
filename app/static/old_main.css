@@ -1,0 +1,185 @@
+
+	@charset "utf-8";
+    /* CSS Document */
+    
+    /* ---------- ERIC MEYER'S RESET CSS ---------- */
+    /* ---------- https://meyerweb.com/eric/tools/css/reset/ ---------- */
+    
+    @import url(reset.css);
+    
+    /* ---------- GENERAL ---------- */
+    
+    body {
+        background: #f4f4f4;
+        color: #5a5656;
+        font-family: "Times New Roman", Times, serif;
+        margin: 0;
+    }
+    
+    
+    
+    h1 {
+        font-size: 2.5em;
+        text-align: center;
+        color: #5a5656;
+        margin: 20px auto;
+    }
+    
+    p {
+        margin: 7px auto;
+        /*text-decoration: underline;*/
+    }
+    
+    
+    
+    .uppercase { text-transform: uppercase; }
+    
+    /* ---------- LOGIN ---------- */
+    img {
+        width: 300px;
+        margin: auto;
+    }
+    
+    .logo{
+        text-align: center;
+    }
+    
+    
+    #login {
+        margin: auto;
+        width: 300px;
+    }
+    
+    form fieldset input[id="username"], input[id="password"] {
+        background: #e5e5e5;
+        border: none;
+        border-radius: 3px;
+        color: #5a5656;
+        font-family: inherit;
+        font-size: 14px;
+        height: 50px;
+        outline: none;
+        padding: 0px 10px;
+        width: 280px;
+        -webkit-appearance:none;
+    }
+    
+    form fieldset button {
+        background-color: #0066CC;
+        border: none;
+        border-radius: 3px;
+        color: #f4f4f4;
+        cursor: pointer;
+        font-family: inherit;
+        height: 50px;
+        text-transform: uppercase;
+        width: 300px;
+        -webkit-appearance:none;
+    }
+    
+    form fieldset a {
+        color: #5a5656;
+        font-size: 10px;
+    }
+    
+    form fieldset a:hover { text-decoration: underline; }
+    
+    
+    /* ---------- HOME ---------- */
+    
+    .testing {
+        color: #383838;
+        margin: 20px auto;
+        width: 900px;
+        padding: 20px 50px 50px 50px;
+        /*border-radius: 20px;*/
+        position: relative;
+        box-shadow: 0 0 5px 2px rgba(0,0,0,.35);
+        background: #FFF;
+        text-align: justify;
+    }
+    
+    div.num {
+        padding: 0.5rem 2rem;
+        align-items: center;
+        position: relative;
+        display: flex;
+    }
+    
+    div.num strong {
+        font-weight: bold;
+        font-size: 4rem;
+        color: #025ea1;
+        wight: 2rem;
+        /*opacity: 0.5;*/
+        align: "JUSTIFY";
+    }
+    
+    div.num h3 {
+        margin-left: 15px;
+    }
+    
+    a {
+        text-decoration: none;
+    }
+    
+    .test {
+        padding: 0 0 25px;
+        font-size: 14pt;
+        line-height: 1.5;
+        border-collapse: collapse;
+        border-bottom: 2.5px solid #025ea1;
+    }
+    
+    .home_checkbox {
+        padding: 5px;
+    }
+    
+    .home_buttons {
+        font-family: "Times New Roman", Times, serif;
+        font-weight: bold;
+        margin-top: 30px;
+        color: #fff !important;
+        text-transform: uppercase;
+        background: #025ea1;
+        padding: 10px;
+        border: 2px solid #025ea1 !important;
+        border-radius: 3px;
+        display: inline-block;
+        transition: all 0.3s ease 0s;
+        width: 150px;
+        text-align: center;
+        font-size: 11pt;
+    }
+    
+    .home_buttons:hover {
+        color: #fff !important;
+        background: #01416f;
+        border-color: #01416f !important;
+        /*border-radius: 50px;
+    
+        transition: all 0.3s ease 0s;*/
+    }
+    
+    a.home_buttons {
+        position: absolute;
+        width: 126px;
+        height: 16px;
+    }
+    
+    a[name="right_button"] {
+        right: 50px;
+        position: absolute;
+        }
+    
+    div.result {
+        display: inline-block;
+        font-size: 40px;
+        margin-top: 30px;
+        left: 50%;
+        position: relative;
+        width: 430px;
+        margin-left: -215px;
+    }
+    
+    

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}.
+            </div>
+        {% endif %}
+        {% endwith %}
+
+<p class="title is-2 is-spaced has-text-centered">
+  Добро пожаловать, {{first_name}}!
+</p>
+
+
+
+{% endblock %}

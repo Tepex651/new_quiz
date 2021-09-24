@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p class="title is-2 is-spaced has-text-centered">
+  Изменение события
+</p>
+
+{% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}.
+            </div>
+        {% endif %}
+        {% endwith %}
+
+<form method="POST" action="{{ url_for('admin.edit_event', id=event.id) }}">
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label has-text-weight-medium">Тема</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <p class="control">
+        <div class="select">
+          <select name='theme_id'>
+            {% set selected = '' %}
+            {% for theme in all_themes %}
+              {% if theme == event.theme %}
+                {% set selected = 'selected' %}
+              {% endif %}
+            <option value='{{ theme.id }}' {{ selected }}>{{ theme }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label has-text-weight-medium">Начало события</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <p class="control">
+          <input name='start_date' class='input' type="date" value="{{ event.start_date }}">
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label has-text-weight-medium">Конец события</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <p class="control">
+          <input name='end_date' class='input' type="date" value="{{ event.end_date }}">
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label has-text-weight-medium">Количество вопросов</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <p class="control">
+          <input name='number_of_questions' class='input' type="number" value='{{ event.number_of_questions }}'>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label has-text-weight-medium">Необходимое количество баллов</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <p class="control">
+          <input name='number_of_correct' class='input' type="number" value='{{ event.number_of_correct }}'>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="buttons is-right">
+        <button class="button is-success">
+          Сохранить
+        </button>
+
+        <button class="button is-danger">
+          Удалить событие
+        </button>
+
+  </div>
+
+</form>
+
+
+
+{% endblock %}

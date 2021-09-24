@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title">Регистрация</h3>
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}. Попробуйте <a href="{{ url_for('auth.login') }}">войти</a>.
+            </div>
+        {% endif %}
+        {% endwith %}
+        <form method="POST" action="/signup">
+            <div class="field">
+                <div class="control has-icons-left">
+                    <input class="input is-medium" type="text" name="first_name" placeholder="Имя" autofocus="">
+                    <span class="icon is-small is-left">
+                        <ion-icon name="person-outline"></ion-icon>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control has-icons-left">
+                    <input class="input is-medium" type="text" name="last_name" placeholder="Фамилия" autofocus="">
+                    <span class="icon is-small is-left">
+                        <ion-icon name="person-outline"></ion-icon>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control has-icons-left">
+                    <input class="input is-medium" type="email" name="email" placeholder="Email" autofocus="">
+                    <span class="icon is-small is-left">
+                        <ion-icon name="mail-outline"></ion-icon>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control has-icons-left">
+                    <input class="input is-medium" type="password" name="password" placeholder="Пароль">
+                    <span class="icon is-small is-left">
+                        <ion-icon name="key-outline"></ion-icon>
+                    </span>
+                </div>
+            </div>
+
+            <button class="button is-block is-info is-medium is-fullwidth">Подтвердить</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'home.html' %}
+
+{% block container %}
+  <p class='logo'><img src="static/AST.png" alt=""></p>
+  <div id="login">
+    <form
+        method="POST"
+        action="{{ url_for('auth.login') }}"
+        role="form">
+      {{ form.csrf_token }}
+      <fieldset>
+        <p><a>{{ form.username() }}</a></p>
+        <p><a>{{ form.password() }}</a></p>
+        <p><button type="submit" class="btn btn-default">Войти</button></p>
+      </fieldset>
+    </form>
+  </div>
+{% endblock %}

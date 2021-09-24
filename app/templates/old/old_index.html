@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block container %}
+  {% if current_user.is_authenticated %}
+
+  {% endif %}
+  <h1>{{ current_user.cn }}</h1>
+  <div class="testing">
+  <form action="/home" method="POST" class="testing-container">
+        {% set count = [0] %}
+        {% for list in global_list_options %}
+        {% if count.append(count.pop() + 1) %}{% endif %}
+        {% if count[0] == 10 %}
+            {% set bottom = 0 %}
+        {% endif %}
+        <div class="test" style="border-bottom: {{ bottom }}">
+          <div class="num"> <strong>{{ count[0] }}</strong> <h3> {{ list.question }}</h3> </div>
+          {% for option in global_list_options[list] %}
+            {% if option.id in false_answers %}
+              {% set checked = 'checked' %}
+              {% set color = 'red' %}
+              {% set text = 'line-through' %}
+              {% set disabled = 'disabled' %}
+            {% elif option.id in user_right_answers %}
+              {% set color = 'green' %}
+              {% set checked = 'checked' %}
+              {% set disabled = 'disabled' %}
+            {% elif option.result == True and user_answers|length %}
+              {% set color = 'green' %}
+              {% set disabled = 'disabled' %}
+            {% elif user_answers|length %}
+              {% set color = 'none' %}
+              {% set disabled = 'disabled' %}
+            {% endif %}
+            <label><div style="border-color: {{ color }}; color: {{ color }}; text-decoration: {{ text }}" class='home_checkbox'>
+              <input type="checkbox" id="check" name="choice" value="{{ option.id }}" {{ checked }} {{ disabled }}>{{ option.opt }}<br>
+            </div></label>
+          {% endfor %}
+
+        </div>
+        {% endfor %}
+    </ol>
+    {% if result is defined and result < 8 %}
+    <a href="{{ url_for('auth.home') }}" class="home_buttons">повторить</a>
+    {% endif %}
+    {% if result is defined %}
+        <div class="result">Ваш результат = <font color="red">{{ result }}</font> из 10</div>
+    {% else %}
+    <button type="submit" name="button" value="submit" class="home_buttons">Подтвердить</button>
+    {% endif %}
+    <a href="{{ url_for('auth.logout') }}" class="home_buttons" name="right_button">Выход</a>
+
+  </form>
+
+
+  </div>
+{% endblock %}

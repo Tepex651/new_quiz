@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<p class="title is-2 is-spaced">
+    Все вопросы
+</p>
+
+    {% for theme in all_themes %}
+        <p class="subtitle is-4"> {{ theme }}</p>
+        <ol type="1">
+            {% for question in theme.questions %}
+            <article class="message is-light">
+                <div class="message-header is-medium">
+                    <a href="{{ url_for('admin.show_question', id=question.id) }}"><li style="list-style-position: inside;">{{ question }}</li></a>
+                    <button class="delete" aria-label="delete"></button>
+                    <!-- <span class="icon is-large" style="justify-content: right;"> 
+                            <a class="button is-white"> <ion-icon name="settings-outline" size='large'></ion-icon> </a>  has-text-warning
+                            <a class="button is-white"><ion-icon name="close-circle-outline" size='large'></ion-icon> </a> has-text-danger
+                    </span> -->
+                </div>
+                <ol type="1">
+                    <div class="message-body">
+                    {% for answer in question.answers %}
+                        {% set color = '' %}
+                        {% if answer.correct == True %}
+                            {% set color = '-success-light' %}
+                        {% endif%}
+                        <div class='box has-background{{ color }}' style="display: flex; justify-content:space-between; margin-bottom: 0.7rem;"><li style="list-style-position: inside; list-style-type: circle;">{{ answer }}</li>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    
+                </ol>
+            </article>
+            {% endfor %}
+        </ol>
+    {% endfor %}
+{% endblock %}

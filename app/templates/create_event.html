@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p class="title is-2 is-spaced has-text-centered">
+  Изменение события
+</p>
+
+<form method="POST" action="{{ url_for('admin.create_event') }}">
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label has-text-weight-medium">Тема</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <p class="control">
+        <div class="select">
+          <select name='theme_id'>
+            {% for theme in all_themes %}
+            <option value='{{ theme.id }}'>{{ theme }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label has-text-weight-medium">Начало события</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <p class="control">
+          <input name='start_date' class='input' type="date">
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label has-text-weight-medium">Конец события</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <p class="control">
+          <input name='end_date' class='input' type="date">
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label has-text-weight-medium">Количество вопросов</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <p class="control">
+          <input name='number_of_questions' class='input' type="number" value='10'>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label has-text-weight-medium">Необходимое количество баллов</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <p class="control">
+          <input name='number_of_correct' class='input' type="number" value='8'>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="buttons is-right">
+        <button class="button is-success">
+          Сохранить
+        </button>
+
+        <button class="button is-danger">
+          Удалить событие
+        </button>
+
+  </div>
+
+</form>
+
+
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-body is-halfheight">
+    <div class="container has-text-centered is-halfheight">
+<div class="column is-4 is-offset-4">
+    <h3 class="title">Вход</h3>
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}.
+            </div>
+        {% endif %}
+        {% endwith %}
+        <form method="POST" action="/login">
+            <div class="field">
+                <div class="control has-icons-left">
+                    <input class="input is-medium" type="email" name="email" placeholder="Ваш Email" autofocus="">
+                    <span class="icon is-small is-left">
+                        <ion-icon name="mail-outline"></ion-icon>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control has-icons-left">
+                    <input class="input is-medium" type="password" name="password" placeholder="Ваш пароль">
+                    <span class="icon is-small is-left">
+                        <ion-icon name="key-outline"></ion-icon>
+                    </span>
+                </div>
+            </div>
+            <div class="field">
+                <label class="checkbox">
+                    <input type="checkbox">
+                    Запомнить меня
+                </label>
+            </div>
+            <button class="button is-block is-info is-medium is-fullwidth">Войти</button>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+{% endblock %}

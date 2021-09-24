@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p class="title is-2 is-spaced has-text-centered">
+    {{ theme }}
+</p>
+
+    
+    <ol type="1">
+        {% for question in theme.questions %}
+        <article class="message is-info is-light">
+            <div class="message-header">
+                <a href="{{ url_for('admin.show_question', id=question.id) }}"><li style="list-style-position: inside;">{{ question }}</li></a>
+                <a class="delete" href="{{ url_for('admin.delete_question', id=question.id) }}"></a>
+            </div>
+            <ol type="1">
+                <div class="message-body">
+                {% for answer in question.answers %}
+                    {% set color = '' %}
+                    {% if answer.correct == True %}
+                        {% set color = '-success-light' %}
+                    {% endif%}
+                    <div class='box has-background{{ color }}' style="display: flex; justify-content:space-between; margin-bottom: 0.7rem;">
+                        <li style="list-style-position: inside; list-style-type: circle;">{{ answer }}</li>
+                    </div>
+                {% endfor %}
+                </div>
+                
+            </ol>
+        </article>
+        {% endfor %}
+    </ol>
+    <a class="button is-medium is-fullwidth is-info is-light mt-5" href="{{ url_for('admin.create_question', theme_id=theme.id) }}">Добавить вопрос</a><br>
+    
+
+
+{% endblock %}

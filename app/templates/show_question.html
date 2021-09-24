@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p class="title is-2 is-spaced has-text-centered">
+  Изменение вопроса 
+</p>
+
+<form method="POST" action="{{ url_for('admin.edit_question', id=question.id) }}">
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label has-text-weight-medium">Вопрос</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <p class="control">
+          <input class="input" type="text" name='question' value="{{ question }}" required>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label has-text-weight-medium">Варианты ответа</label>
+    </div>
+
+    <div id='1' class="field-body" style="display: block;">
+
+      {% for answer in question.answers %}
+      {% if answer.correct == True %}
+        {% set checked = 'checked' %}
+      {% endif %}
+      <div id='row' name='row' class="field has-addons" style="margin: 0; margin-bottom: 0.5rem; height: 40px;">
+        <p class="control is-expanded">
+
+          <input name="answer_id" type="hidden" value="{{ answer.id }}">
+          <input class="input" type="text" name="answer_name" value="{{ answer }}" required>
+        </p>
+        <p class="control">
+          <label class="checkbox" style="height: 100%;">
+            <input id="checkbox-value" type="hidden" name="answer_correct" value="{{ answer.correct }}">
+            <input id="checkbox" type="checkbox" style="width: 40px; height: 40px;" onClick="stateCheckbox(this)" {{checked}}>
+          </label>
+        </p>
+        <p class="control">
+          <a class="delete is-medium mx-2" aria-label="delete" style="top: 50%; margin-top: -12px;"
+            href="{{ url_for('admin.delete_answer', id=answer.id) }}"></a>
+        </p>
+      </div>
+      {% endfor %}
+      <div id='buttons' class="field is-grouped is-flex-direction-row is-justify-content-space-between">
+        <p class="control is-left">
+          <a class="button is-link is-left" onClick="createDiv()">
+            Добавить вариант ответа
+          </a>
+        </p>
+        <div class='field is-grouped has-addons-right'>
+          <p class="control is-right">
+            <button class="button is-success">
+              Сохранить
+            </button>
+          </p>
+          <p class="control">
+            <a href="{{ url_for('admin.delete_question', id=question.id) }}" class="button is-danger">
+              Удалить вопрос
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</form>
+
+
+
+{% endblock %}

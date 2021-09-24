@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>АО "Атомспецтранс"</title>
+    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+      {% for category, message in get_flashed_messages(with_categories=true) %}
+        <div class="alert alert-{{category}} alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          {{ message }}
+        </div>
+      {% endfor %}
+      </div>
+    {% block container %}{% endblock %}
+    </div>
+
+    {% block scripts %}
+    {% endblock %}
+  </body>
+</html>
