@@ -5,7 +5,7 @@
   Изменение вопроса 
 </p>
 
-<form method="POST" action="{{ url_for('admin.edit_question', id=question.id) }}">
+<form method="POST" action="{{ url_for('admin_panel.edit_question', id=question.id) }}">
   <div class="field is-horizontal">
     <div class="field-label is-normal">
       <label class="label has-text-weight-medium">Вопрос</label>
@@ -44,7 +44,7 @@
         </p>
         <p class="control">
           <a class="delete is-medium mx-2" aria-label="delete" style="top: 50%; margin-top: -12px;"
-            href="{{ url_for('admin.delete_answer', id=answer.id) }}"></a>
+            href="{{ url_for('admin_panel.delete_answer', id=answer.id) }}"></a>
         </p>
       </div>
       {% endfor %}
@@ -61,7 +61,7 @@
             </button>
           </p>
           <p class="control">
-            <a href="{{ url_for('admin.delete_question', id=question.id) }}" class="button is-danger">
+            <a href="{{ url_for('admin_panel.delete_question', id=question.id) }}" class="button is-danger">
               Удалить вопрос
             </a>
           </p>

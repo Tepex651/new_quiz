@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="notification is-danger">
+    {{ messages[0] }}.
+</div>
+{% endif %}
+{% endwith %}
+<div class='title is-2 is-spaced has-text-centered'>{{ theme }}</div>
+<form method="POST" action="{{ url_for('main.check_result') }}">
+    <input type="hidden" name='theme' value="{{ theme }}">
+<div class="content">
+    <div class='box'>
+        <ol type="1" style="margin-right: 2em;">
+            {% for question in questions %}
+            <div class='box has-background-info-light'>
+                <li style="list-style-position: inside;">{{question}}</li>
+                <input type="hidden" name='question' value='{{ question.id }}'>
+            </div>
+            <div class="content mx-5">
+            {% for answer in question.answers %}
+            <p style="display: table-row;">
+                <div style="display: table-cell; vertical-align: middle;"><input type="checkbox" name='{{ question.id }}' id='{{ answer.id }}' value='{{ answer.id }}'></div>
+                <div class='px-4' style="display: table-cell;"><label class="checkbox" for='{{ answer.id }}'>{{ answer }}</label></div>
+            </p>
+            {% endfor %}
+    
+            </div>
+            {% endfor %}
+        </ol>
+            <p class="control">
+                <button class="button is-link">
+                  Подтвердить
+                </button>
+            </p>
+
+    </div>
+</div>
+
+</form>
+{% endblock %}

@@ -14,7 +14,7 @@
         {% endif %}
         {% endwith %}
 
-<form method="POST" action="{{ url_for('admin.edit_event', id=event.id) }}">
+<form method="POST" action="{{ url_for('admin_panel.edit_event', id=event.id) }}">
   <div class="field is-horizontal">
     <div class="field-label is-normal">
       <label class="label has-text-weight-medium">Тема</label>

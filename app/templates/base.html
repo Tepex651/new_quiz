@@ -45,10 +45,10 @@
                         Администрирование
                     </p>
                     <ul class="menu-list">
-                        <li><a href="{{ url_for('admin.users') }}">Пользователи</a></li>
-                        <li><a href="{{ url_for('admin.events') }}">События</a></li>
+                        <li><a href="{{ url_for('admin_panel.users') }}">Пользователи</a></li>
+                        <li><a href="{{ url_for('admin_panel.events') }}">События</a></li>
                         <li><a>Результаты</a></li>
-                        <li><a href="{{ url_for('admin.themes') }}">Темы</a></li>
+                        <li><a href="{{ url_for('admin_panel.themes') }}">Темы</a></li>
                         <li><a href="">LDAP-подключение</a></li>
                     </ul>
                     {% endif %}

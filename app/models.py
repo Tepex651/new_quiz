@@ -68,7 +68,6 @@ class Theme(db.Model):
     events = relationship('Event', back_populates='theme', cascade='all, delete', passive_deletes=True)
     questions = relationship('Question', back_populates='theme', cascade='all, delete', passive_deletes=True)
      
-
     def __repr__(self) -> str:
         return self.name
 

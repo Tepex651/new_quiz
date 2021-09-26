@@ -13,7 +13,7 @@
             {% for question in theme.questions %}
             <article class="message is-light">
                 <div class="message-header is-medium">
-                    <a href="{{ url_for('admin.show_question', id=question.id) }}"><li style="list-style-position: inside;">{{ question }}</li></a>
+                    <a href="{{ url_for('admin_panel.show_question', id=question.id) }}"><li style="list-style-position: inside;">{{ question }}</li></a>
                     <button class="delete" aria-label="delete"></button>
                     <!-- <span class="icon is-large" style="justify-content: right;"> 
                             <a class="button is-white"> <ion-icon name="settings-outline" size='large'></ion-icon> </a>  has-text-warning

@@ -8,7 +8,7 @@ from .models import Event, User, Theme, Question, Answer
 
 
 
-admin_panel = Blueprint('admin', __name__)
+admin_panel = Blueprint('admin_panel', __name__)
 
 
 def admin_required(f):
@@ -44,15 +44,15 @@ def create_theme():
     name_theme = request.form.get('theme')
     if name_theme == '':
         flash('Нельзя создать тему без названия')
-        return redirect(url_for('main.themes'))
+        return redirect(url_for('admin_panel.themes'))
     theme = Theme.query.filter_by(name=name_theme).first()
     if theme:
         flash(f'Тема {name_theme} уже существует. Нельзя создать две одинаковых темы')
-        return redirect(url_for('main.themes'))
+        return redirect(url_for('admin_panel.themes'))
     new_theme = Theme(name = name_theme)
     db.session.add(new_theme)
     db.session.commit()
-    return redirect(url_for('main.themes'))
+    return redirect(url_for('admin_panel.themes'))
 
 
 @admin_panel.route('/delete_theme/<id>')
@@ -62,7 +62,7 @@ def delete_theme(id):
     delete_theme = Theme.query.filter_by(id=id).first()
     db.session.delete(delete_theme)
     db.session.commit()
-    return redirect(url_for('main.themes'))
+    return redirect(url_for('admin_panel.themes'))
 
 
 @admin_panel.route('/theme/<id>')
@@ -80,7 +80,7 @@ def delete_question(id):
     delete_question = Question.query.filter_by(id=id).first()
     db.session.delete(delete_question)
     db.session.commit()
-    return redirect(url_for('main.show_theme', id=delete_question.theme_id))
+    return redirect(url_for('admin_panel.show_theme', id=delete_question.theme_id))
 
 
 @admin_panel.route('/edit_question/<id>',  methods=['POST'])
@@ -106,7 +106,7 @@ def edit_question(id):
             new_answer = Answer(question_id=id, name=new_answer_name[new_list_id], correct=True if new_answer_correct[new_list_id] == 'True' else False)
             db.session.add(new_answer)
     db.session.commit()
-    return redirect(url_for('main.show_question', id=question.id))
+    return redirect(url_for('admin_panel.show_question', id=question.id))
 
 
 @admin_panel.route('/create_question/<theme_id>', methods=['POST', 'GET'])
@@ -117,14 +117,13 @@ def create_question(theme_id):
         new_question = Question(theme_id=theme_id, name=request.form.get('question'))
         db.session.add(new_question)
         db.session.commit()
-        print(new_question.id)
         new_answer_name = request.form.getlist('new_answer_name')
         new_answer_correct = request.form.getlist('new_answer_correct')
         for list_id in range(len(new_answer_name)):
             new_answer = Answer(question_id=new_question.id, name=new_answer_name[list_id], correct=True if new_answer_correct[list_id] == 'True' else False)
             db.session.add(new_answer)
         db.session.commit()
-        return redirect(url_for('main.show_question', id=new_question.id))
+        return redirect(url_for('admin_panel.show_theme', id=theme_id))
     return render_template('create_question.html', theme_id=theme_id)
 
 
@@ -136,7 +135,7 @@ def show_question(id):
     if question:
         return render_template('show_question.html', question=question)
     else:
-        return redirect(url_for('main.questions'))
+        return redirect(url_for('admin_panel.questions'))
     
 
 @admin_panel.route('/delete_answer/<id>')
@@ -146,7 +145,7 @@ def delete_answer(id):
     delete_answer = Answer.query.filter_by(id=id).first()
     db.session.delete(delete_answer)
     db.session.commit()
-    return redirect(url_for('main.show_question', id=delete_answer.question_id))
+    return redirect(url_for('admin_panel.show_question', id=delete_answer.question_id))
 
 
 @admin_panel.route('/events')
@@ -169,8 +168,8 @@ def show_event(id):
 @login_required
 @admin_required
 def edit_event(id):
-    
     theme_id = request.form.get('theme_id')
+    theme = Theme.query.filter_by(id=theme_id).first()
     start_date = request.form.get('start_date') or None
     end_date = request.form.get('end_date') or None
     number_of_questions = request.form.get('number_of_questions')
@@ -179,28 +178,34 @@ def edit_event(id):
         start_date = datetime.now().date()
     if int(number_of_questions) < int(number_of_correct):
         flash('Количество вопросов должно быть больше, чем необходимое количество баллов')
+    elif len(theme.questions) < int(number_of_questions):
+        flash(f'В теме {theme} слишком мало вопросов. Добавьте в тему еще вопросов')
     else:
         Event.query.filter_by(id=id).update(dict(theme_id=theme_id, start_date=start_date, end_date=end_date, number_of_questions=number_of_questions, number_of_correct=number_of_correct))
         db.session.commit()
-    return redirect(url_for('main.show_event', id=id))
+    return redirect(url_for('admin_panel.show_event', id=id))
 
 
 @admin_panel.route('/create_event', methods=['POST', 'GET'])
 @login_required
 @admin_required
 def create_event():
-    all_themes = Theme.query.all()
+    
     if request.method == "POST":
         theme_id = request.form.get('theme_id')
+        theme = Theme.query.filter_by(id=theme_id).first()
         start_date = request.form.get('start_date') or None
-        end_date = request.form.get('end_date')  or None
+        end_date = request.form.get('end_date') or None
         number_of_questions = request.form.get('number_of_questions')
         number_of_correct = request.form.get('number_of_correct')
         if int(number_of_questions) < int(number_of_correct):
             flash('Количество вопросов должно быть больше, чем необходимое количество баллов')
+        elif len(theme.questions) < int(number_of_questions):
+            flash(f'В теме {theme} слишком мало вопросов. Добавьте в тему еще вопросов')
         else:
             new_event = Event(theme_id=theme_id, start_date=start_date, end_date=end_date, number_of_questions=number_of_questions, number_of_correct=number_of_correct)
             db.session.add(new_event)
             db.session.commit()
-            return redirect(url_for('main.show_event', id=new_event.id))
+            return redirect(url_for('admin_panel.show_event', id=new_event.id))
+    all_themes = Theme.query.all()
     return render_template('create_event.html', all_themes=all_themes)
