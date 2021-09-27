@@ -3,80 +3,41 @@
 {% block content %}
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-<div class="notification {{color_for_notification}}">
+<div class="notification is-danger">
     {{ messages[0] }}.
 </div>
 {% endif %}
 {% endwith %}
-<div class='title is-2 is-spaced has-text-centered'>{{ event.theme }}</div>
-<form method="POST" action="{{ url_for('main.check_result', id=event.id) }}">
-    <div class="content">
-        <ol type="1" style="margin-left: 0">
+<div class='title is-2 is-spaced has-text-centered'>{{ theme }}</div>
+<form method="POST" action="{{ url_for('main.check_result') }}">
+    <input type="hidden" name='theme' value="{{ theme }}">
+<div class="content">
+    <div class='box'>
+        <ol type="1" style="margin-right: 2em;">
             {% for question in questions %}
-            {% if correct_questions is defined and question.id in correct_questions %}
-                {% set box_color = 'has-background-success-light' %}
-            {% elif correct_questions is defined and question.id not in correct_questions %}
-                {% set box_color = 'has-background-danger-light' %}
-            {% endif %}
-            <div class='box {{ box_color }}'>
-                <div class='box has-background-info-light'>
-                    <li style="list-style-position: inside;">{{ question }}</li>
-                    <input type="hidden" name='question' value='{{ question.id }}'>
-                </div>
-                <div class="content mx-5">
-                    {% for answer in question.answers %}
-                    {% if user_answers is defined %}
-                        {% set disabled = 'disabled' %}
-                        {% if answer.correct == True %}
-                            {% set text_color = 'has-text-success' %}
-                        {% endif %}
-                        {% if answer.id in user_answers[question.id] %}
-                            {% set checked = 'checked' %}
-                            {% if answer.correct == False %}    
-                                {% set text_color = 'has-text-danger' %}
-                            {% endif %}
-                        {% endif %}
-                    {% endif %}
-                    <p style="display: table-row;">
-                    <div style="display: table-cell; vertical-align: middle;"><input type="checkbox" {{ checked }} {{ disabled }} name='{{ question.id }}' id='{{ answer.id }}' value='{{ answer.id }}'></div>
-                    <div class='px-4' style="display: table-cell;"><label class="checkbox {{ text_color }}" for='{{ answer.id }}'>{{ answer }}</label></div>
-                    </p>
-                    {% endfor %}
-                </div>
+            <div class='box has-background-info-light'>
+                <li style="list-style-position: inside;">{{question}}</li>
+                <input type="hidden" name='question' value='{{ question.id }}'>
+            </div>
+            <div class="content mx-5">
+            {% for answer in question.answers %}
+            <p style="display: table-row;">
+                <div style="display: table-cell; vertical-align: middle;"><input type="checkbox" name='{{ question.id }}' id='{{ answer.id }}' value='{{ answer.id }}'></div>
+                <div class='px-4' style="display: table-cell;"><label class="checkbox" for='{{ answer.id }}'>{{ answer }}</label></div>
+            </p>
+            {% endfor %}
+    
             </div>
             {% endfor %}
         </ol>
-        {% if result is defined %}
-        <div class="modal is-active">
-            <div class="modal-background"></div>
-            <div class="modal-card">
-                
-                <section class="modal-card-body">
-                  Правильных ответов {{ result }}. 
-                  {% if result >= event.number_of_correct %}
-                  Этого достаточно для положительного результата
-                  {% else %}
-                  Этого не достаточно для положительного результата. Пройдите тест <a href="{{ url_for('main.execute_event', id=event.id) }}">еще раз</a>.
-                  {% endif %}
-                </section>
-                <footer class="modal-card-foot">
-                  <a class="button is-success" onClick='closeModal(this)'>ОК</a>
-                </footer>
-              </div>
-          </div>
-        {% endif %}
-        <div class="field is-grouped is-justify-content-space-between">
             <p class="control">
-                <button class="button is-link is-medium is-fullwidth">
-                    Подтвердить
+                <button class="button is-link">
+                  Подтвердить
                 </button>
             </p>
-            <p class="control">
-                <a class="button is-danger is-medium is-right" href="{{ url_for('main.profile') }}">
-                    Отменить
-                </a>
-            </p>
-        </div>
+
     </div>
+</div>
+
 </form>
 {% endblock %}

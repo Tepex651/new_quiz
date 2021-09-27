@@ -4,7 +4,8 @@ from flask_login import current_user, login_required
 from functools import wraps
 
 from app import db
-from .models import Event, User, Theme, Question, Answer, Result
+from .models import Event, User, Theme, Question, Answer
+
 
 
 admin_panel = Blueprint('admin_panel', __name__)
@@ -163,7 +164,6 @@ def show_event(id):
     all_themes = Theme.query.all()
     return render_template('show_event.html', event=event, all_themes=all_themes)
 
-
 @admin_panel.route('/edit_event/<id>', methods=['POST'])
 @login_required
 @admin_required
@@ -190,6 +190,7 @@ def edit_event(id):
 @login_required
 @admin_required
 def create_event():
+    
     if request.method == "POST":
         theme_id = request.form.get('theme_id')
         theme = Theme.query.filter_by(id=theme_id).first()
@@ -208,30 +209,3 @@ def create_event():
             return redirect(url_for('admin_panel.show_event', id=new_event.id))
     all_themes = Theme.query.all()
     return render_template('create_event.html', all_themes=all_themes)
-
-
-@admin_panel.route('/delete_event/<id>')
-@login_required
-@admin_required
-def delete_event(id):
-    delete_event = Event.query.filter_by(id=id).first()
-    db.session.delete(delete_event)
-    db.session.commit()
-    return redirect(url_for('admin_panel.events'))
-
-
-@admin_panel.route('/results')
-@login_required
-@admin_required
-def results():
-    all_events = Event.query.all()
-    return render_template('results.html', all_events=all_events)
-
-@admin_panel.route('/results/<id>')
-@login_required
-@admin_required
-def show_result(id):
-    event = Event.query.filter_by(id=id).first()
-    all_results = Result.query.filter(Result.event_id == event.id).all()
-    count_users = User.query.count()
-    return render_template('show_result.html', all_results=all_results, event=event, count_users=count_users, count_results=len(all_results))

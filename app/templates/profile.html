@@ -17,17 +17,10 @@
   Предстоящие события
 </p>
 <div class="columns is-multiline">
-  {% set box_color = 'has-background-light' %}
+
   {% for event in all_events %}
   <div class="column is-3 has-text-centered">
-    {% if events_with_user_results[event] %} 
-      {% if events_with_user_results[event][-1].result >= event.number_of_correct %}
-        {% set box_color = 'has-background-success-light' %}
-      {% else %}
-        {% set box_color = 'has-background-danger-light' %}
-      {% endif %}
-    {% endif %}
-      <div class='box has-text-centered {{ box_color }}'
+      <div class='box has-text-centered has-background-light'
           style='height: 150px; overflow: hidden; width: 100%; min-height: 36px; position: relative;'>
           <a class='' style='position: absolute; right: 0; left: 0; top: 50%; transform: translate(0, -50%)' href="{{ url_for('main.execute_event', id=event.id) }}">
               <p class='is-size-4'> {{ event.theme }} </p>

@@ -10,8 +10,8 @@
     <div class="column is-3 has-text-centered">
         <div class='box has-text-centered has-background-light'
             style='height: 150px; overflow: hidden; width: 100%; min-height: 36px; position: relative;'>
-            <a class="delete" style='position: absolute; right: 5px; top: 5px;' href="{{ url_for('admin_panel.delete_event', id=event.id) }}"></a>
-            <a style='position: absolute; right: 0; left: 0; top: 50%; transform: translate(0, -50%)' href="{{ url_for('admin_panel.show_event', id=event.id) }}">
+            <a class="delete" style='position: absolute; right: 5px; top: 5px;' href=""></a>
+            <a class='' style='position: absolute; right: 0; left: 0; top: 50%; transform: translate(0, -50%)' href="{{ url_for('admin_panel.show_event', id=event.id) }}">
                 <p class='is-size-4'> {{ event.theme }} </p>
                 <p class='is-size-6'> с {{ event.start_date }} {% if event.end_date != None %} по {{ event.end_date }} {% endif %}</p>
             </a>
@@ -23,7 +23,7 @@
         <div class='box has-text-centered'
             style='height: 150px; overflow: hidden; width: 100%; min-height: 36px; position: relative;'>
             <a class="delete" style='position: absolute; right: 5px; top: 5px;' href=""></a>
-            <a style='position: absolute; right: 0; left: 0; top: 50%; transform: translate(0, -50%)' href="{{ url_for('admin_panel.create_event') }}">
+            <a class='' style='position: absolute; right: 0; left: 0; top: 50%; transform: translate(0, -50%)' href="{{ url_for('admin_panel.create_event') }}">
                 <p class='is-size-4'>Добавить событие</p>
             </a>
         </div>

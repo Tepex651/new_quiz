@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="hero-body is-fullheight">
-    <div class="container has-text-centered is-fullheight">
+<div class="hero-body is-halfheight">
+    <div class="container has-text-centered is-halfheight">
 <div class="column is-4 is-offset-4">
     <h3 class="title">Вход</h3>
     <div class="box">
@@ -37,10 +37,6 @@
                     Запомнить меня
                 </label>
             </div>
-            <p class="mb-2">
-                Забыли пароль?
-                <a href="{{ url_for('auth.reset_password_request') }}">Нажмите, чтобы сбросить</a>
-            </p>
             <button class="button is-block is-info is-medium is-fullwidth">Войти</button>
         </form>
     </div>

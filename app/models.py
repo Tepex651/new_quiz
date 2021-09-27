@@ -1,11 +1,12 @@
-
+from flask import flash
+from flask_login import current_user
+from flask_wtf import FlaskForm
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, DateTime
+from sqlalchemy.orm import relation, relationship
+from wtforms import StringField, PasswordField
 from datetime import datetime
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship
-from time import time
-import jwt
-
-from app import db, app
+from wtforms.validators import InputRequired
+from app import db
 
 
 class User(db.Model):
@@ -37,17 +38,6 @@ class User(db.Model):
 
     def get_id(self):
         return (self.id)
-
-    def get_reset_password_token(self, expires_in=600):
-        return jwt.encode({'reset_password': self.id, 'exp': time() + expires_in}, app.config['SECRET_KEY'], algorithm='HS256')
-
-    @staticmethod
-    def verify_reset_password_token(token):
-        try:
-            id = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])['reset_password']
-        except:
-            return
-        return User.query.get(id)
 
 class Result(db.Model):
     __tablename__ = 'result'
@@ -102,3 +92,75 @@ class Answer(db.Model):
 
     def __repr__(self) -> str:
         return self.name
+
+# def get_ldap_connection():
+#     conn = ldap.initialize(app.config['LDAP_PROVIDER_URL'])
+#     bind_dn = "cn=admin,ou=ASZI,dc=ast,dc=local"
+#     bind_pwd = "admin"
+#     conn.simple_bind(bind_dn, bind_pwd)
+#     conn.result()
+#     return conn
+
+
+# class User(db.Model):
+#     __bind_key__ = 'user_'
+#     id = db.Column(db.Integer, primary_key=True)
+#     cn = db.Column(db.String(100))
+#     username = db.Column(db.String(6))
+#     result = db.Column(db.Float)
+#     date_testing = db.Column(db.DateTime)
+#     admin = db.Column(db.Boolean)
+
+#     def __init__(self, username, password):
+#         self.username = username
+
+#     def is_admin(self):
+#         return self.admin
+
+#     @staticmethod
+#     def try_login(username, password):
+#         conn = get_ldap_connection()
+#         user_dn = ''
+#         user_search = conn.search('ou=ASZI,dc=ast,dc=local', ldap.SCOPE_SUBTREE,
+#                                   '(&(objectClass=user)(sAMAccountName=%s))' % (username), ["dn"])
+#         actual_user_tuple = conn.result(user_search)
+#         user_dn = actual_user_tuple[1][0][0]
+#         user_cn = user_dn.split(',')[0].split('=')[1]
+#         if user_dn != "":
+#             conn.simple_bind_s(user_dn, password)
+#         return user_cn
+
+#     def is_authenticated(self):
+#         return True
+
+#     def is_active(self):
+#         return True
+
+#     def is_anonymous(self):
+#         return True
+
+#     def get_id(self):
+#         return (self.id)
+
+
+# class List(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     question = db.Column(db.Text)
+#     options = db.relationship('Option', backref='list', lazy='select')
+
+#     def __repr__(self):
+#         return f'{self.question}'
+
+
+# class Option(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     opt = db.Column(db.Text)
+#     result = db.Column(db.Boolean, default=False)
+#     list_id = db.Column(db.Integer, db.ForeignKey('list.id'))
+
+
+# class LoginForm(FlaskForm):
+#     email = StringField('Почта', [InputRequired()], render_kw={"placeholder": "Логин"})
+#     password = PasswordField('Пароль', [InputRequired()], render_kw={"placeholder": "Пароль"})
+
+
