@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">
+    Выберите событие
+</h1>
+<div class="columns is-multiline">
+
+    {% for event in all_events %}
+    <div class="column is-3 has-text-centered">
+        <div class='box has-text-centered has-background-light'
+            style='height: 150px; overflow: hidden; width: 100%; min-height: 36px; position: relative;'>
+            <a class="delete" style='position: absolute; right: 5px; top: 5px;' href=""></a>
+            <a class='' style='position: absolute; right: 0; left: 0; top: 50%; transform: translate(0, -50%)' href="{{ url_for('admin_panel.show_result', id=event.id) }}">
+                <p class='is-size-4'> {{ event.theme }} </p>
+                <p class='is-size-6'> с {{ event.start_date }} {% if event.end_date != None %} по {{ event.end_date }} {% endif %}</p>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

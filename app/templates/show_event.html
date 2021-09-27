@@ -90,9 +90,9 @@
           Сохранить
         </button>
 
-        <button class="button is-danger">
+        <a class="button is-danger" href="{{ url_for('admin_panel.delete_event', id=event.id) }}">
           Удалить событие
-        </button>
+        </a>
 
   </div>
 

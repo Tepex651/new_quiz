@@ -14,47 +14,29 @@
     <nav class="navbar">
         <div class="container">
             <div id="navbarMenuHeroA" class="navbar-menu">
+                {% if current_user.is_authenticated and current_user.admin == True %}
+                <div class="navbar-start">
+                    <a href="{{ url_for('main.profile') }}" class="navbar-item">Главная</a>
+                    <a href="{{ url_for('admin_panel.users') }}" class="navbar-item">Пользователи</a>
+                    <a href="{{ url_for('admin_panel.events') }}" class="navbar-item">События</a>
+                    <a href="{{ url_for('admin_panel.results') }}" class="navbar-item">Результаты событий</a>
+                    <a href="{{ url_for('admin_panel.themes') }}" class="navbar-item">Темы</a>
+                    <!-- <a href="" class="navbar-item">LDAP-подключение</a> -->
+                </div>
+                {% endif %}
                 <div class="navbar-end">
                     {% if not current_user.is_authenticated %}
-                    <a href="{{ url_for('auth.login') }}" class="navbar-item">
-                        Войти
-                    </a>
-                    <a href="{{ url_for('auth.signup') }}" class="navbar-item">
-                        Регистрация
-                    </a>
+                    <a href="{{ url_for('auth.login') }}" class="navbar-item">Войти</a>
+                    <a href="{{ url_for('auth.signup') }}" class="navbar-item">Регистрация</a>
                     {% else %}
-                    <a href="{{ url_for('auth.logout') }}" class="navbar-item">
-                        Выйти
-                    </a>
+                    <a href="{{ url_for('auth.logout') }}" class="navbar-item">Выйти</a>
                     {% endif %}
                 </div>
             </div>
         </div>
     </nav>
     <br>
-    {% if current_user.is_authenticated %}
     <div class="container">
-        <div class="columns">
-            <div class="column is-narrow mt-6 mr-2">
-                <aside class="menu">
-                    <ul class="menu-list">
-                        <li><a href="{{ url_for('main.profile') }}">Главная</a></li>
-                    </ul>
-                    {% if current_user.admin == True %}
-                    <p class="menu-label">
-                        Администрирование
-                    </p>
-                    <ul class="menu-list">
-                        <li><a href="{{ url_for('admin_panel.users') }}">Пользователи</a></li>
-                        <li><a href="{{ url_for('admin_panel.events') }}">События</a></li>
-                        <li><a>Результаты</a></li>
-                        <li><a href="{{ url_for('admin_panel.themes') }}">Темы</a></li>
-                        <li><a href="">LDAP-подключение</a></li>
-                    </ul>
-                    {% endif %}
-                </aside>
-            </div>
-            {% endif %}
             <div class="column">
                 {% block content %}
                 {% endblock %}

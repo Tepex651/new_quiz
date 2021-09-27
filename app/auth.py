@@ -2,8 +2,9 @@ from flask import Blueprint, render_template, g, url_for, request, redirect
 from flask.helpers import flash
 from flask_login import current_user, login_required
 from flask_login.utils import login_user, logout_user
+from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import db, login_manager
+from app import db, login_manager, app, mail
 from .models import User
 
 auth = Blueprint('auth', __name__)
@@ -66,3 +67,52 @@ def signup_post():
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
+
+def send_email(subject, sender, recipients, text_body, html_body):
+    msg = Message(subject, sender=sender, recipients=recipients)
+    msg.body = text_body
+    msg.html = html_body
+    mail.send(msg)
+
+@auth.route('/reset_password_request', methods=['GET', 'POST'])
+def reset_password_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.profile'))
+    email = request.form.get('email')
+    if request.method == 'POST':
+        user = User.query.filter_by(email=email).first()
+        if user:
+            send_password_reset_email(user)
+        flash('Проверьте почту для смены пароля')
+        return redirect(url_for('auth.login'))
+    return render_template('reset_password_request.html')
+
+def send_password_reset_email(user):
+    token = user.get_reset_password_token()
+    send_email('Сброс пароля',
+               sender=app.config['ADMINS'][0],
+               recipients=[user.email],
+               text_body=render_template('email/reset_password.txt', user=user, token=token),
+               html_body=render_template('email/reset_password.html', user=user, token=token))
+
+@auth.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('auth.login'))
+    user = User.verify_reset_password_token(token)
+    if not user:
+        return redirect(url_for('auth.login'))
+    if request.method == "POST":
+        password1 = request.form.get('password1')
+        password2 = request.form.get('password2')
+        if password1 == password2:
+            user.password = generate_password_hash(password1, method='sha256')
+            db.session.commit()
+            flash('Пароль успешно изменен')
+            return redirect(url_for('auth.login'))
+        else:
+            flash('Пароли должны совпадать')
+    return render_template('reset_password.html', token=token)
+
+
+
