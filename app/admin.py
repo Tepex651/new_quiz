@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from functools import wraps
 
 from app import db
-from .models import Event, User, Theme, Question, Answer
+from .models import Event, Result, User, Theme, Question, Answer
 
 
 
@@ -190,7 +190,6 @@ def edit_event(id):
 @login_required
 @admin_required
 def create_event():
-    
     if request.method == "POST":
         theme_id = request.form.get('theme_id')
         theme = Theme.query.filter_by(id=theme_id).first()
@@ -209,3 +208,20 @@ def create_event():
             return redirect(url_for('admin_panel.show_event', id=new_event.id))
     all_themes = Theme.query.all()
     return render_template('create_event.html', all_themes=all_themes)
+
+@admin_panel.route('/results')
+@login_required
+@admin_required
+def results():
+    all_events = Event.query.all()
+    return render_template('results.html', all_events=all_events)
+
+@admin_panel.route('/result/<id>')
+@login_required
+@admin_required
+def show_results(id):
+    event = Event.query.filter_by(id=id).first()
+    
+    all_results = event.results
+    count_users = User.query.count()
+    return render_template('show_results.html', event=event, all_results=all_results, count_users=count_users, count_results=len(all_results))

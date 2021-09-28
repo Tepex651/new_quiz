@@ -9,13 +9,10 @@ from flask_mail import Mail
 app = Flask(__name__)
 
 app.config.from_object('config')
-# app.config['LDAP_PROVIDER_URL'] = 'ldap://192.168.0.190:389/'
-# app.config['LDAP_PROTOCOL_VERSION'] = 3
-app.config['LOG_FILE'] = 'application.log'
 
 db = SQLAlchemy(app)
+mail = Mail(app)
 
-app.secret_key = 'some_random_key'
 
 login_manager = LoginManager()
 login_manager.init_app(app)

@@ -1,21 +1,22 @@
 import random
 
-from flask import Blueprint, render_template, flash, redirect, url_for, request, session
+from datetime import datetime
+from flask import Blueprint, render_template, request, session
 from flask_login import current_user, login_required
-from datetime import date, datetime
+
 from app import db
-from .models import Event, Result, User, Theme, Question, Answer
+from .models import Event, Result, Question, Answer
+
 
 main = Blueprint('main', __name__)
-
 
 
 @main.route('/profile')
 @login_required
 def profile():
     all_events = Event.query.all()
-    all_results = current_user.results
-    return render_template('profile.html', all_events=all_events)
+    all_user_results = {event: Result.query.filter_by(user_id=current_user.id, event_id=event.id).first() for event in all_events}
+    return render_template('profile.html', all_events=all_events, all_user_results=all_user_results)
 
 
 @main.route('/execute_event/<id>')
@@ -23,22 +24,28 @@ def profile():
 def execute_event(id):
     event = Event.query.filter_by(id=id).first()
     random_questions = random.sample(event.theme.questions, event.number_of_questions)
-    order_questions = [question.id for question in random_questions]
-    # session['questions'] = random_questions
-    return render_template('execute_event.html', theme=event.theme, questions=random_questions, order_questions=order_questions)
+    session['order_questions'] = [question.id for question in random_questions]
+    return render_template('execute_event.html', event=event, questions=random_questions)
 
-@main.route('/execute_event', methods=['POST'])
+@main.route('/execute_event/<id>', methods=['POST'])
 @login_required
-def check_result():
-    theme = request.form.get('theme')
+def check_result(id):
+    event = Event.query.filter_by(id=id).first()
+    questions = [Question.query.filter_by(id=id).first() for id in session['order_questions']]
+    # from form
+    user_answers = {question.id: request.form.getlist(str(question.id)) for question in questions}
+    # from db
+    questions_with_correct = {question.id: list(map(str, Answer.query.filter(Answer.question_id == question.id, Answer.correct == True).all())) for question in questions}
 
-    questions_id = request.form.getlist('question')
-    questions = Question.query.filter(Question.id.in_(questions_id)).all()
-    right_answers = Answer.query.filter(Answer.question_id.in_(questions_id), Answer.correct == True).all()
-
-    user_answers = {id: request.form.getlist(id) for id in questions_id}
-    questions_with_correct = {question.id: db.session.query(Answer.id).filter(Answer.question_id == question.id, Answer.correct == True).all() for question in questions}
-
-    flash(questions_with_correct)
-    # session['questions'] = random_questions
-    return render_template('execute_event.html', theme=theme, questions=questions)
+    right_questions = [id for id in questions_with_correct if user_answers[id] == questions_with_correct[id]]
+    result = len(right_questions)
+    old_result = Result.query.filter_by(user_id=current_user.id, event_id=event.id).first()
+    if old_result:
+        if old_result.result < event.number_of_correct:
+            old_result.result = result
+            old_result.date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    else:
+        new_result = Result(user_id=current_user.id, result=result, date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), event_id=id)
+        db.session.add(new_result)
+    db.session.commit()
+    return render_template('execute_event.html', event=event, questions=questions, result=result, user_answers=user_answers, right_questions=right_questions)

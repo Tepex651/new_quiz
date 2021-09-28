@@ -32,3 +32,9 @@ function stateCheckbox(elem) {
     hiddenbox.value='False';
   }
 }
+
+
+function closeModal(elem) {
+  var mainModal = elem.parentNode.parentNode.parentNode;
+  mainModal.remove();
+}

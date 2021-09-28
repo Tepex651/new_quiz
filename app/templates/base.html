@@ -14,6 +14,16 @@
     <nav class="navbar">
         <div class="container">
             <div id="navbarMenuHeroA" class="navbar-menu">
+                <div class="navbar-start">
+                    {% if current_user.is_authenticated and current_user.admin == True %}
+                    <a class="navbar-item" href="{{ url_for('main.profile') }}">Главная</a>
+                    <a class="navbar-item" href="{{ url_for('admin_panel.users') }}">Пользователи</a>
+                    <a class="navbar-item" href="{{ url_for('admin_panel.events') }}">События</a>
+                    <a class="navbar-item" href="{{ url_for('admin_panel.results') }}">Результаты</a>
+                    <a class="navbar-item" href="{{ url_for('admin_panel.themes') }}">Темы</a>
+                    <!-- <a href="">LDAP-подключение</a></li> -->
+                    {% endif %}
+                </div>
                 <div class="navbar-end">
                     {% if not current_user.is_authenticated %}
                     <a href="{{ url_for('auth.login') }}" class="navbar-item">
@@ -32,29 +42,7 @@
         </div>
     </nav>
     <br>
-    {% if current_user.is_authenticated %}
     <div class="container">
-        <div class="columns">
-            <div class="column is-narrow mt-6 mr-2">
-                <aside class="menu">
-                    <ul class="menu-list">
-                        <li><a href="{{ url_for('main.profile') }}">Главная</a></li>
-                    </ul>
-                    {% if current_user.admin == True %}
-                    <p class="menu-label">
-                        Администрирование
-                    </p>
-                    <ul class="menu-list">
-                        <li><a href="{{ url_for('admin_panel.users') }}">Пользователи</a></li>
-                        <li><a href="{{ url_for('admin_panel.events') }}">События</a></li>
-                        <li><a>Результаты</a></li>
-                        <li><a href="{{ url_for('admin_panel.themes') }}">Темы</a></li>
-                        <li><a href="">LDAP-подключение</a></li>
-                    </ul>
-                    {% endif %}
-                </aside>
-            </div>
-            {% endif %}
             <div class="column">
                 {% block content %}
                 {% endblock %}
