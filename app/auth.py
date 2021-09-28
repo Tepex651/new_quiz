@@ -87,7 +87,7 @@ def logout():
 @auth.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
     if current_user.is_authenticated:
-        return redirect(url_for('auth.profile'))
+        return redirect(url_for('main.profile'))
     email = request.form.get('email')
     if request.method == 'POST':
         user = User.query.filter_by(email=email).first()
@@ -118,7 +118,7 @@ def reset_password(token):
         return redirect(url_for('auth.login'))
     if request.method == 'POST':
         password1 = request.form.get('password1')
-        password2 = request.form.get('password1')
+        password2 = request.form.get('password2')
         if password1 == password2:
             user.password = generate_password_hash(password1, method='sha256')
             db.session.commit()

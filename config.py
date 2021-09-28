@@ -2,7 +2,7 @@ import os
 
 
 CSRF_ENABLED = True
-SECRET_KEY = 'Xw0G2EqGu3BNhndu0LfiXXXH8grIIAph+YFE7Y9jGqK/6KRAmTcDfDsNf55cDLvZENTLB9RUN9W7/K2/z7ovAg=='
+SECRET_KEY = os.environ.get('SECRET_KEY')
 SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:password@localhost/quiz'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ECHO = True

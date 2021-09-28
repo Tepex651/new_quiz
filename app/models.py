@@ -1,9 +1,10 @@
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from app import db, app
 import jwt
 from time import time
+
+from app import db, app
 
 
 class User(db.Model):
